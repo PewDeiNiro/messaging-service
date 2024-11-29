@@ -4,6 +4,7 @@ import com.pewde.messagingservice.entity.Dialog;
 import com.pewde.messagingservice.entity.Message;
 import com.pewde.messagingservice.request.CreateDialogRequest;
 import com.pewde.messagingservice.request.DeleteMessageRequest;
+import com.pewde.messagingservice.request.EditMessageRequest;
 import com.pewde.messagingservice.request.SendMessageRequest;
 import com.pewde.messagingservice.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -88,6 +89,13 @@ public class MessageController {
     public ResponseEntity<HttpStatus> deleteMessage(@RequestBody @Valid DeleteMessageRequest request,
                                                     @RequestHeader("Authorization") String token){
         return messageService.deleteMessage(request, token);
+    }
+
+    @Operation(summary = "Редактирование сообщения")
+    @PutMapping("/message/edit")
+    public Message editMessage(@RequestBody @Valid EditMessageRequest request,
+                               @RequestHeader("Authorization") String token){
+        return messageService.editMessage(request, token);
     }
 
 }

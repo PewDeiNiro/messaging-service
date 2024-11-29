@@ -9,6 +9,7 @@ import com.pewde.messagingservice.repository.MessageRepository;
 import com.pewde.messagingservice.repository.UserRepository;
 import com.pewde.messagingservice.request.CreateDialogRequest;
 import com.pewde.messagingservice.request.DeleteMessageRequest;
+import com.pewde.messagingservice.request.EditMessageRequest;
 import com.pewde.messagingservice.request.SendMessageRequest;
 import com.pewde.messagingservice.token.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class MessageService {
 
     public Dialog createDialog(CreateDialogRequest request, String token){
         User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
-//        AuthService.checkAuth(sender, token);
+        AuthService.checkAuth(sender, token);
         List<User> receivers = new ArrayList<>(List.of(sender));
         for (int id : request.getReceiverIds()){
             receivers.add(userRepository.findById(id).orElseThrow(UserDoesNotExistsException::new));
@@ -97,7 +98,7 @@ public class MessageService {
 
     public Message sendMessage(SendMessageRequest request, String token){
         User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
-//        AuthService.checkAuth(sender, token);
+        AuthService.checkAuth(sender, token);
         Dialog dialog = dialogRepository.findById(request.getDialogId()).orElseThrow(DialogDoesNotExistsException::new);
         if (!dialog.getCollocutors().contains(sender)){
             throw new UserDoesNotBelongToDialogException();
@@ -112,7 +113,7 @@ public class MessageService {
 
     public ResponseEntity<HttpStatus> deleteMessage(DeleteMessageRequest request, String token){
         User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
-//        AuthService.checkAuth(sender, token);
+        AuthService.checkAuth(sender, token);
         Message message = messageRepository.findById(request.getMessageId()).orElseThrow(MessageDoesNotExistsException::new);
         if (message.getSender().getId() != sender.getId()){
             throw new MessageDoesNotBelongToUserException();
@@ -122,6 +123,17 @@ public class MessageService {
         sender.getMessages().remove(message);
         messageRepository.delete(message);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    public Message editMessage(EditMessageRequest request, String token){
+        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
+        AuthService.checkAuth(sender, token);
+        Message message = messageRepository.findById(request.getMessageId()).orElseThrow(MessageDoesNotExistsException::new);
+        if (message.getSender().getId() != sender.getId()){
+            throw new MessageDoesNotBelongToUserException();
+        }
+        message.setText(request.getMessage());
+        return messageRepository.saveAndFlush(message);
     }
 
 }
