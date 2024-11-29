@@ -1,0 +1,9 @@
+services:
+  db:
+    image: 'postgres:13.3'
+    environment:
+      POSTGRES_DB: "emss"
+      POSTGRES_USER: "msg_user"
+      POSTGRES_PASSWORD: "msg_user"
+    ports:
+      - "10001:5432"
