@@ -6,20 +6,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateDialogRequest {
+public class CreateConversationRequest {
 
     @NotNull
     @Schema(description = "Уникальный идентификатор отправителя сообщения")
     private int senderId;
 
     @NotNull
-    @Schema(description = "Уникальный идентификатор получателя сообщения")
-    private int receiverId;
+    @Schema(description = "Список получателей: личные сообщения - 1 получатель, беседа - неограниченное количество получателей", example = "[2]")
+    private Set<Integer> receiverIds;
 
-    @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Сообщение, которое будет отправлено при создании диалога")
+    @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    private String title;
+
+    @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String message;
 
 }
