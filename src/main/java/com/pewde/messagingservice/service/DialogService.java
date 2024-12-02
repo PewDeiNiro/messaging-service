@@ -46,20 +46,25 @@ public class DialogService {
         messages.removeIf(message -> message.getId() <= messageId);
         return messages;
     }
-    //TODO убрать возможность создавать повторный диалог между пользователями
+
     public Dialog createDialog(CreateDialogRequest request, String token){
         if (request.getSenderId() == request.getReceiverId()) {
             throw new CanNotMessagingWithSelfException();
         }
         User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new),
                 receiver = userRepository.findById(request.getReceiverId()).orElseThrow(UserDoesNotExistsException::new);
+        //        AuthService.checkAuth(sender, token);
         if (receiver.getBlocklist().contains(sender)){
             throw new UserBlockedThisException();
         }
-//        AuthService.checkAuth(sender, token);
+        if (!dialogRepository.findByCreatorAndType(sender, DialogType.DIALOG).isEmpty()
+                || !dialogRepository.findByCreatorAndType(receiver, DialogType.DIALOG).isEmpty()) {
+            throw new DialogAlreadyExistsException();
+        }
         List<User> receivers = new ArrayList<>(List.of(sender, receiver));
         List<Message> messages = new ArrayList<>();
         Dialog dialog = new Dialog();
+        dialog.setCreator(sender);
         dialog.setCollocutors(receivers);
         dialog.setTitle("");
         dialog.setType(DialogType.DIALOG);
