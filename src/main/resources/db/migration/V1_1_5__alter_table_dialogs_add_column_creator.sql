@@ -1,0 +1,1 @@
+ALTER TABLE messaging.dialogs ADD COLUMN creator_id INTEGER REFERENCES users.users(id);

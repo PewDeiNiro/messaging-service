@@ -3,15 +3,15 @@ package com.pewde.messagingservice.service;
 import com.pewde.messagingservice.entity.Dialog;
 import com.pewde.messagingservice.entity.Message;
 import com.pewde.messagingservice.entity.User;
+import com.pewde.messagingservice.enums.DialogType;
 import com.pewde.messagingservice.exception.DialogDoesNotExistsException;
 import com.pewde.messagingservice.exception.MessageDoesNotExistsException;
 import com.pewde.messagingservice.exception.UserDoesNotExistsException;
 import com.pewde.messagingservice.repository.DialogRepository;
 import com.pewde.messagingservice.repository.MessageRepository;
 import com.pewde.messagingservice.repository.UserRepository;
-import com.pewde.messagingservice.request.CanNotMessagingWithSelfException;
+import com.pewde.messagingservice.exception.CanNotMessagingWithSelfException;
 import com.pewde.messagingservice.request.CreateDialogRequest;
-import com.pewde.messagingservice.token.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +62,7 @@ public class DialogService {
         Dialog dialog = new Dialog();
         dialog.setCollocutors(receivers);
         dialog.setTitle("");
+        dialog.setType(DialogType.DIALOG);
         if (request.getMessage() != null && !request.getMessage().isEmpty()) {
             Message message = new Message();
             message.setText(request.getMessage());

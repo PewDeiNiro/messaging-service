@@ -1,0 +1,1 @@
+ALTER TABLE messaging.dialogs ADD COLUMN type VARCHAR;
