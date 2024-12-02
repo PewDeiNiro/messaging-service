@@ -3,10 +3,12 @@ package com.pewde.messagingservice.service;
 import com.pewde.messagingservice.entity.Dialog;
 import com.pewde.messagingservice.entity.Message;
 import com.pewde.messagingservice.entity.User;
+import com.pewde.messagingservice.enums.DialogType;
 import com.pewde.messagingservice.exception.*;
 import com.pewde.messagingservice.repository.DialogRepository;
 import com.pewde.messagingservice.repository.MessageRepository;
 import com.pewde.messagingservice.repository.UserRepository;
+import com.pewde.messagingservice.request.BlockOrUnblockUserRequest;
 import com.pewde.messagingservice.request.DeleteMessageRequest;
 import com.pewde.messagingservice.request.EditMessageRequest;
 import com.pewde.messagingservice.request.SendMessageRequest;
@@ -45,6 +47,9 @@ public class MessageService {
         User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
 //        AuthService.checkAuth(sender, token);
         Dialog dialog = dialogRepository.findById(request.getDialogId()).orElseThrow(DialogDoesNotExistsException::new);
+        if (dialog.getType().equals(DialogType.DIALOG) && dialog.getCollocutors().get(0).getBlocklist().contains(sender)){
+            throw new UserBlockedThisException();
+        }
         if (!dialog.getCollocutors().contains(sender)){
             throw new UserDoesNotBelongToDialogException();
         }
@@ -79,6 +84,28 @@ public class MessageService {
         }
         message.setText(request.getMessage());
         return messageRepository.saveAndFlush(message);
+    }
+
+    public User blockUser(BlockOrUnblockUserRequest request, String token){
+        User user = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new),
+                block = userRepository.findById(request.getBlockId()).orElseThrow(UserDoesNotExistsException::new);
+//        AuthService.checkAuth(user, token);
+        if (user.getBlocklist().contains(block)){
+            throw new UserAlreadyBlockedException();
+        }
+        user.getBlocklist().add(block);
+        return userRepository.saveAndFlush(user);
+    }
+
+    public User unblockUser(BlockOrUnblockUserRequest request, String token){
+        User user = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new),
+                unblock = userRepository.findById(request.getBlockId()).orElseThrow(UserDoesNotExistsException::new);
+//        AuthService.checkAuth(user, token);
+        if (!user.getBlocklist().contains(unblock)){
+            throw new UserAlreadyUnblockedException();
+        }
+        user.getBlocklist().remove(unblock);
+        return userRepository.saveAndFlush(user);
     }
 
 }

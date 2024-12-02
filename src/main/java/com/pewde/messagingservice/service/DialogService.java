@@ -4,13 +4,10 @@ import com.pewde.messagingservice.entity.Dialog;
 import com.pewde.messagingservice.entity.Message;
 import com.pewde.messagingservice.entity.User;
 import com.pewde.messagingservice.enums.DialogType;
-import com.pewde.messagingservice.exception.DialogDoesNotExistsException;
-import com.pewde.messagingservice.exception.MessageDoesNotExistsException;
-import com.pewde.messagingservice.exception.UserDoesNotExistsException;
+import com.pewde.messagingservice.exception.*;
 import com.pewde.messagingservice.repository.DialogRepository;
 import com.pewde.messagingservice.repository.MessageRepository;
 import com.pewde.messagingservice.repository.UserRepository;
-import com.pewde.messagingservice.exception.CanNotMessagingWithSelfException;
 import com.pewde.messagingservice.request.CreateDialogRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,15 +46,18 @@ public class DialogService {
         messages.removeIf(message -> message.getId() <= messageId);
         return messages;
     }
-
+    //TODO убрать возможность создавать повторный диалог между пользователями
     public Dialog createDialog(CreateDialogRequest request, String token){
         if (request.getSenderId() == request.getReceiverId()) {
             throw new CanNotMessagingWithSelfException();
         }
-        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
+        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new),
+                receiver = userRepository.findById(request.getReceiverId()).orElseThrow(UserDoesNotExistsException::new);
+        if (receiver.getBlocklist().contains(sender)){
+            throw new UserBlockedThisException();
+        }
 //        AuthService.checkAuth(sender, token);
-        List<User> receivers = new ArrayList<>(List.of(sender,
-                userRepository.findById(request.getReceiverId()).orElseThrow(UserDoesNotExistsException::new)));
+        List<User> receivers = new ArrayList<>(List.of(sender, receiver));
         List<Message> messages = new ArrayList<>();
         Dialog dialog = new Dialog();
         dialog.setCollocutors(receivers);

@@ -34,8 +34,12 @@ public class ConversationService {
 //        AuthService.checkAuth(sender, token);
         List<User> receivers = new ArrayList<>(List.of(sender));
         for (int id : request.getReceiverIds()){
+            User receiver = userRepository.findById(id).orElseThrow(UserDoesNotExistsException::new);
+            if (receiver.getBlocklist().contains(sender)){
+                throw new UserBlockedThisException();
+            }
             if (sender.getId() != id) {
-                receivers.add(userRepository.findById(id).orElseThrow(UserDoesNotExistsException::new));
+                receivers.add(receiver);
             }
         }
         List<User> collocutors = new ArrayList<>(List.copyOf(receivers)), admins = new ArrayList<>(List.of(sender));
@@ -88,6 +92,9 @@ public class ConversationService {
 //        AuthService.checkAuth(admin, token);
         if (dialog.getType() == DialogType.DIALOG){
             throw new OperationNotForDialogException();
+        }
+        if (user.getBlocklist().contains(admin)){
+            throw new UserBlockedThisException();
         }
         if (!dialog.getAdmins().contains(admin)){
             throw new UserDoesNotDialogAdminException();
