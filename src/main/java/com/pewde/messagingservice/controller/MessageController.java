@@ -1,8 +1,6 @@
 package com.pewde.messagingservice.controller;
 
 import com.pewde.messagingservice.entity.Message;
-import com.pewde.messagingservice.entity.User;
-import com.pewde.messagingservice.request.BlockOrUnblockUserRequest;
 import com.pewde.messagingservice.request.DeleteMessageRequest;
 import com.pewde.messagingservice.request.EditMessageRequest;
 import com.pewde.messagingservice.request.SendMessageRequest;
@@ -65,21 +63,5 @@ public class MessageController {
                                @RequestHeader("Authorization") String token){
         return messageService.editMessage(request, token);
     }
-
-    //TODO перенести логику блокировки пользователя в другой микросервис
-    @Operation(summary = "Блокировка пользователя")
-    @PostMapping("/user/block")
-    public User blockUser(@RequestBody @Valid BlockOrUnblockUserRequest request,
-                          @RequestHeader("Authorization") String token){
-        return messageService.blockUser(request, token);
-    }
-
-    @Operation(summary = "Разблокировка пользователя")
-    @PostMapping("/user/unblock")
-    public User unblockUser(@RequestBody @Valid BlockOrUnblockUserRequest request,
-                            @RequestHeader("Authorization") String token){
-        return messageService.unblockUser(request, token);
-    }
-
 
 }
