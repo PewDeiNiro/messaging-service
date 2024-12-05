@@ -12,11 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class EditMessageRequest {
 
-    @NotNull
     @Schema(description = "Уникальный идентификатор отправителя")
-    private int senderId;
+    private int userId;
 
-    @NotNull
     @Schema(description = "Уникальный идентификатор сообщения")
     private int messageId;
 

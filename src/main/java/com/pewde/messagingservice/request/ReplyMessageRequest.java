@@ -19,6 +19,6 @@ public class ReplyMessageRequest {
 
     @NotEmpty
     @Schema(description = "Сообщение, которое будет отправлено в ответе")
-    private String text;
+    private String message;
 
 }

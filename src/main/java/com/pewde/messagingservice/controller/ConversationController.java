@@ -27,7 +27,7 @@ public class ConversationController {
 
     @Operation(summary = "Создание беседы")
     @PostMapping("/create")
-    public Dialog createConversation(@RequestBody @Valid CreateConversationRequest request,
+    public Dialog createConversation(@RequestBody CreateConversationRequest request,
                                      @RequestHeader("Authorization") String token) {
         return conversationService.createConversation(request, token);
     }

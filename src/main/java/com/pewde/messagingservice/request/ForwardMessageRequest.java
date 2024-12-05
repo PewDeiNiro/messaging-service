@@ -20,6 +20,6 @@ public class ForwardMessageRequest {
     private int dialogId;
 
     @Schema(description = "Сообщение, которое будет отправлено в ответе")
-    private String text;
+    private String message;
 
 }

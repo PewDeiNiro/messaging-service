@@ -31,7 +31,7 @@ public class ConversationService {
     private DialogRepository dialogRepository;
 
     public Dialog createConversation(CreateConversationRequest request, String token){
-        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
+        User sender = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
 //        AuthService.checkAuth(sender, token);
         List<User> receivers = new ArrayList<>(List.of(sender));
         for (int id : request.getReceiverIds()){

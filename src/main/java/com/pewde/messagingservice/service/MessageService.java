@@ -42,7 +42,7 @@ public class MessageService {
     }
 
     public Message sendMessage(SendMessageRequest request, String token){
-        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
+        User sender = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
 //        AuthService.checkAuth(sender, token);
         Dialog dialog = dialogRepository.findById(request.getDialogId()).orElseThrow(DialogDoesNotExistsException::new);
         if (dialog.getType().equals(DialogType.DIALOG) && dialog.getCollocutors().get(0).getBlocklist().contains(sender)){
@@ -61,7 +61,7 @@ public class MessageService {
     }
 
     public ResponseEntity<HttpStatus> deleteMessage(DeleteMessageRequest request, String token){
-        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
+        User sender = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
 //        AuthService.checkAuth(sender, token);
         Message message = messageRepository.findById(request.getMessageId()).orElseThrow(MessageDoesNotExistsException::new);
         if (message.getSender().getId() != sender.getId()){
@@ -79,7 +79,7 @@ public class MessageService {
     }
 
     public Message editMessage(EditMessageRequest request, String token){
-        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new);
+        User sender = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
 //        AuthService.checkAuth(sender, token);
         Message message = messageRepository.findById(request.getMessageId()).orElseThrow(MessageDoesNotExistsException::new);
         if (message.getSender().getId() != sender.getId()){
@@ -97,7 +97,7 @@ public class MessageService {
         message.setSender(user);
         message.setParent(parent);
         message.setType(MessageType.REPLY);
-        message.setText(request.getText());
+        message.setText(request.getMessage());
         message.setDialog(parent.getDialog());
         return messageRepository.saveAndFlush(message);
     }
@@ -115,8 +115,8 @@ public class MessageService {
         message.setParent(parent);
         message.setType(MessageType.FORWARD);
         message.setDialog(dialog);
-        if (request.getText() != null && !request.getText().isEmpty()){
-            message.setText(request.getText());
+        if (request.getMessage() != null && !request.getMessage().isEmpty()){
+            message.setText(request.getMessage());
         }
         return messageRepository.saveAndFlush(message);
     }

@@ -1,7 +1,6 @@
 package com.pewde.messagingservice.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,11 +12,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class CreateConversationRequest {
 
-    @NotNull
     @Schema(description = "Уникальный идентификатор отправителя сообщения")
-    private int senderId;
+    private int userId;
 
-    @NotNull
     @Schema(description = "Список получателей: личные сообщения - 1 получатель, беседа - неограниченное количество получателей", example = "[2]")
     private Set<Integer> receiverIds;
 

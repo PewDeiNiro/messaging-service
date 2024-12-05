@@ -50,7 +50,7 @@ public class MessageController {
 
     @Operation(summary = "Удаление сообщения")
     @DeleteMapping("/delete")
-    public ResponseEntity<HttpStatus> deleteMessage(@RequestBody @Valid DeleteMessageRequest request,
+    public ResponseEntity<HttpStatus> deleteMessage(@RequestBody DeleteMessageRequest request,
                                                     @RequestHeader("Authorization") String token){
         return messageService.deleteMessage(request, token);
     }

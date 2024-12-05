@@ -11,11 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteMessageRequest {
 
-    @NotNull
     @Schema(description = "Уникальный идентификатор отправителя сообщения")
-    private int senderId;
+    private int userId;
 
-    @NotNull
     @Schema(description = "Уникальный идентификатор сообщения")
     private int messageId;
 

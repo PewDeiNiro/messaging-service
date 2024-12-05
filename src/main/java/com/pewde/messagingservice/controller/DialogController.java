@@ -49,7 +49,7 @@ public class DialogController {
 
     @Operation(summary = "Создание диалога")
     @PostMapping("/create")
-    public Dialog createDialog(@RequestBody @Valid CreateDialogRequest request,
+    public Dialog createDialog(@RequestBody CreateDialogRequest request,
                                @RequestHeader("Authorization") String token){
         return dialogService.createDialog(request, token);
     }

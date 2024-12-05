@@ -49,10 +49,10 @@ public class DialogService {
     }
 
     public Dialog createDialog(CreateDialogRequest request, String token){
-        if (request.getSenderId() == request.getReceiverId()) {
+        if (request.getUserId() == request.getReceiverId()) {
             throw new CanNotMessagingWithSelfException();
         }
-        User sender = userRepository.findById(request.getSenderId()).orElseThrow(UserDoesNotExistsException::new),
+        User sender = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new),
                 receiver = userRepository.findById(request.getReceiverId()).orElseThrow(UserDoesNotExistsException::new);
         //        AuthService.checkAuth(sender, token);
         if (receiver.getBlocklist().contains(sender)){
