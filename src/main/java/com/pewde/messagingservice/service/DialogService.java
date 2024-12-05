@@ -4,6 +4,7 @@ import com.pewde.messagingservice.entity.Dialog;
 import com.pewde.messagingservice.entity.Message;
 import com.pewde.messagingservice.entity.User;
 import com.pewde.messagingservice.enums.DialogType;
+import com.pewde.messagingservice.enums.MessageType;
 import com.pewde.messagingservice.exception.*;
 import com.pewde.messagingservice.repository.DialogRepository;
 import com.pewde.messagingservice.repository.MessageRepository;
@@ -73,6 +74,7 @@ public class DialogService {
             message.setText(request.getMessage());
             message.setSender(sender);
             message.setDialog(dialog);
+            message.setType(MessageType.MESSAGE);
             messages.add(message);
         }
         dialog.setMessages(messages);

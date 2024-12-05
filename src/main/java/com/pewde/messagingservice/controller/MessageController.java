@@ -1,9 +1,7 @@
 package com.pewde.messagingservice.controller;
 
 import com.pewde.messagingservice.entity.Message;
-import com.pewde.messagingservice.request.DeleteMessageRequest;
-import com.pewde.messagingservice.request.EditMessageRequest;
-import com.pewde.messagingservice.request.SendMessageRequest;
+import com.pewde.messagingservice.request.*;
 import com.pewde.messagingservice.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -62,6 +60,20 @@ public class MessageController {
     public Message editMessage(@RequestBody @Valid EditMessageRequest request,
                                @RequestHeader("Authorization") String token){
         return messageService.editMessage(request, token);
+    }
+
+    @Operation(summary = "Ответ на сообщение")
+    @PostMapping("/reply")
+    public Message replyMessage(@RequestBody @Valid ReplyMessageRequest request,
+                                @RequestHeader("Authorization") String token){
+        return messageService.replyMessage(request, token);
+    }
+
+    @Operation(summary = "Пересылка сообщения")
+    @PostMapping("/forward")
+    public Message forwardMessage(@RequestBody ForwardMessageRequest request,
+                                  @RequestHeader("Authorization") String token){
+        return messageService.forwardMessage(request, token);
     }
 
 }
