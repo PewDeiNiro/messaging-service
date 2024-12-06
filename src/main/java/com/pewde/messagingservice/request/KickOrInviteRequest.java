@@ -13,11 +13,11 @@ public class KickOrInviteRequest {
 
     @NotNull
     @Schema(description = "Уникальный идентификатор администратора, выполняющего действие")
-    private int adminId;
+    private int userId;
 
     @NotNull
     @Schema(description = "Уникальный идентификатор пользователя, над которым выполняется действие")
-    private int userId;
+    private int targetId;
 
     @NotNull
     @Schema(description = "Уникальный идентификатор беседы")

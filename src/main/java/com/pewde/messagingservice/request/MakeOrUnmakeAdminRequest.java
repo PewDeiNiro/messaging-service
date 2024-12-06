@@ -13,11 +13,11 @@ public class MakeOrUnmakeAdminRequest {
 
     @NotNull
     @Schema(description = "Уникальный идентификатор создателя беседы")
-    private int creatorId;
+    private int userId;
 
     @NotNull
     @Schema(description = "Уникальный идентификатор нового администратора")
-    private int userId;
+    private int targetId;
 
     @NotNull
     @Schema(description = "Уникальный идентификатор диалога")

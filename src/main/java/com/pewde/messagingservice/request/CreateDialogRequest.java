@@ -14,7 +14,7 @@ public class CreateDialogRequest {
     private int userId;
 
     @Schema(description = "Уникальный идентификатор получателя сообщения")
-    private int receiverId;
+    private int targetId;
 
     @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED, description = "Сообщение, которое будет отправлено при создании диалога")
     private String message;

@@ -16,7 +16,7 @@ public class CreateConversationRequest {
     private int userId;
 
     @Schema(description = "Список получателей: личные сообщения - 1 получатель, беседа - неограниченное количество получателей", example = "[2]")
-    private Set<Integer> receiverIds;
+    private Set<Integer> targetIds;
 
     @Schema(requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String title;

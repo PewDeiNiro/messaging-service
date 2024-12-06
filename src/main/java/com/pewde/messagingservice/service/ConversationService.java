@@ -34,7 +34,7 @@ public class ConversationService {
         User sender = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
 //        AuthService.checkAuth(sender, token);
         List<User> receivers = new ArrayList<>(List.of(sender));
-        for (int id : request.getReceiverIds()){
+        for (int id : request.getTargetIds()){
             User receiver = userRepository.findById(id).orElseThrow(UserDoesNotExistsException::new);
             if (receiver.getBlocklist().contains(sender)){
                 throw new UserBlockedThisException();
@@ -88,8 +88,8 @@ public class ConversationService {
     }
 
     public Dialog inviteUser(KickOrInviteRequest request, String token){
-        User admin = userRepository.findById(request.getAdminId()).orElseThrow(UserDoesNotExistsException::new),
-                user = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
+        User admin = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new),
+                user = userRepository.findById(request.getTargetId()).orElseThrow(UserDoesNotExistsException::new);
         Dialog dialog = dialogRepository.findById(request.getDialogId()).orElseThrow(DialogDoesNotExistsException::new);
 //        AuthService.checkAuth(admin, token);
         if (dialog.getType() == DialogType.DIALOG){
@@ -109,8 +109,8 @@ public class ConversationService {
     }
 
     public ResponseEntity<HttpStatus> kickUser(KickOrInviteRequest request, String token){
-        User admin = userRepository.findById(request.getAdminId()).orElseThrow(UserDoesNotExistsException::new),
-                user = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
+        User admin = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new),
+                user = userRepository.findById(request.getTargetId()).orElseThrow(UserDoesNotExistsException::new);
         Dialog dialog = dialogRepository.findById(request.getDialogId()).orElseThrow(DialogDoesNotExistsException::new);
 //        AuthService.checkAuth(admin, token);
         if (dialog.getType() == DialogType.DIALOG){
@@ -132,8 +132,8 @@ public class ConversationService {
     }
 
     public Dialog appointAdmin(MakeOrUnmakeAdminRequest request, String token){
-        User creator = userRepository.findById(request.getCreatorId()).orElseThrow(UserDoesNotExistsException::new),
-                user = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
+        User creator = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new),
+                user = userRepository.findById(request.getTargetId()).orElseThrow(UserDoesNotExistsException::new);
         Dialog dialog = dialogRepository.findById(request.getDialogId()).orElseThrow(DialogDoesNotExistsException::new);
 //        AuthService.checkAuth(creator, token);
         if (dialog.getType() == DialogType.DIALOG){
@@ -153,8 +153,8 @@ public class ConversationService {
     }
 
     public Dialog demoteAdmin(MakeOrUnmakeAdminRequest request, String token){
-        User creator = userRepository.findById(request.getCreatorId()).orElseThrow(UserDoesNotExistsException::new),
-                user = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new);
+        User creator = userRepository.findById(request.getUserId()).orElseThrow(UserDoesNotExistsException::new),
+                user = userRepository.findById(request.getTargetId()).orElseThrow(UserDoesNotExistsException::new);
         Dialog dialog = dialogRepository.findById(request.getDialogId()).orElseThrow(DialogDoesNotExistsException::new);
 //        AuthService.checkAuth(creator, token);
         if (dialog.getType() == DialogType.DIALOG){
